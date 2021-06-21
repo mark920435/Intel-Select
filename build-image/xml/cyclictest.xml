@@ -1,0 +1,62 @@
+<domain type="kvm">
+  <name>cyclictest</name>
+  <memory unit="MiB">8192</memory>
+  <currentMemory unit="MiB">8192</currentMemory>
+  <cpu mode="host-passthrough"/>
+  <vcpu placement="static">10</vcpu>
+  <cputune>
+    <vcpupin cpuset="1" vcpu="0"/>
+    <vcpupin cpuset="2" vcpu="1"/>
+    <vcpupin cpuset="3" vcpu="2"/>
+    <vcpupin cpuset="4" vcpu="3"/>
+    <vcpupin cpuset="5" vcpu="4"/>
+    <vcpupin cpuset="6" vcpu="5"/>
+    <vcpupin cpuset="7" vcpu="6"/>
+    <vcpupin cpuset="8" vcpu="7"/>
+    <vcpupin cpuset="9" vcpu="8"/>
+    <vcpupin cpuset="10" vcpu="9"/>
+    <emulatorpin cpuset="11"/>
+  </cputune>
+  <os>
+    <type machine="pc" arch="x86_64">hvm</type>
+    <boot dev="hd"/>
+    <bios rebootTimeout="1"/>
+  </os>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/libexec/qemu-kvm</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2' cache='none'/>
+      <source file='/var/lib/libvirt/images/cyclictest.qcow2'/>
+      <target dev='vda' bus='virtio'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x00' function='0x0'/>
+    </disk>
+    <disk type='file' device='cdrom'>
+      <driver name='qemu' type='raw'/>
+      <target dev='hda' bus='ide'/>
+      <readonly/>
+      <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+    </disk>
+    <controller type="ide" index="0">
+      <address type="pci" bus="0x00" function="0x1" slot="0x01" domain="0x0000"/>
+    </controller>
+    <serial type="pty">
+      <target port="0"/>
+    </serial>
+    <console type="pty">
+      <target type="serial" port="0"/>
+    </console>
+    <memballoon model="none"> </memballoon>
+    <interface type="bridge">
+      <source bridge="virbr0"/>
+      <mac address="52:54:00:00:00:f1"/>
+      <model type="virtio"/>
+    </interface>
+    <channel type="unix">
+      <source mode="bind"/>
+      <target type="virtio" name="org.qemu.guest_agent.0"/>
+    </channel>
+  </devices>
+</domain>

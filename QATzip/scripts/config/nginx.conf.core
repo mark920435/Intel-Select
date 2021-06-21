@@ -1,0 +1,52 @@
+user root;
+worker_processes 32;
+#ssl_engine qat;
+worker_rlimit_nofile 30000;
+events
+{
+	use epoll;
+	worker_connections 200000;
+	#multi_accept on;
+}
+http
+{
+	  ssl_buffer_size 64k;
+	  keepalive_timeout  100;
+          include       mime.types;
+          default_type  application/octet-stream;
+          sendfile on;
+          #HTTP ONLY
+          server
+          {
+                listen       8080;
+                server_name  localhost;
+                #charset koi8-r;
+                #access_log  logs/host.access.log  main;
+                location /
+                {
+                        root   html;
+                        index  index.html index.htm;
+                }
+          } 
+
+          server
+          {
+                listen       4400 ssl asynch reuseport backlog=200000;
+                server_name  localhost; 
+                sendfile on;
+                ssl_certificate      /nginx/certs/server.crt;
+                ssl_certificate_key  /nginx/certs/server.key;
+
+                ssl_session_timeout  5m;
+
+                ssl_protocols  TLSv1.2;
+                ssl_ciphers  AES128-SHA:AES256-SHA;
+                ssl_prefer_server_ciphers   on;
+
+                location /
+                {
+                    root   html;
+                    index  index.html index.htm;
+                }
+           }
+}	

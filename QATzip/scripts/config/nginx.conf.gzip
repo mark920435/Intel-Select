@@ -1,0 +1,178 @@
+user root;
+worker_processes 9;
+worker_priority 0;
+worker_rlimit_nofile 1000000;
+events
+{
+  use epoll;
+  worker_connections 8192;
+  multi_accept on;
+  accept_mutex on;
+}
+http
+{
+          include       mime.types;
+          default_type  application/octet-stream;
+          limit_conn_zone $server_name zone=perserver:512000;
+          sendfile on;
+          access_log off;
+	 gzip         on;
+	 gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/vnd.ms-fontobject application/x-font-ttf font/opentype image/svg+xml image/x-icon;
+	 gzip_buffers 16 8k;
+	 gzip_comp_level 1;
+	 gzip_min_length     128;
+	 gzip_http_version   1.0;
+          #HTTP ONLY
+        server
+        {
+                	listen       172.16.1.1:4400 ssl  reuseport backlog=131072 so_keepalive=off rcvbuf=65536 sndbuf=65536 ;
+          	sendfile on;
+          	sendfile_max_chunk 524288;
+			keepalive_timeout 0s;
+			tcp_nopush on;
+			tcp_nodelay on;
+			ssl_verify_client off;
+			ssl_session_tickets off;
+                	access_log  off;
+                	limit_conn perserver 250;
+                	lingering_close off;
+                	lingering_time 1;
+	 	gzip         on;
+	 gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/vnd.ms-fontobject application/x-font-ttf font/opentype image/svg+xml image/x-icon;
+	 gzip_buffers 16 8k;
+	 gzip_comp_level 1;
+	 gzip_min_length     128;
+	 gzip_http_version   1.0;
+                server_name  server_1;
+
+                ssl_certificate      /nginx/certs/server.crt;
+                ssl_certificate_key  /nginx/certs/server.key;
+
+                ssl_session_timeout  300s;
+
+                ssl_protocols  TLSv1.2;
+                ssl_buffer_size 65536;
+                ssl_ciphers  AES128-SHA:AES256-SHA;
+                ssl_prefer_server_ciphers   on;
+
+                location /
+                {
+                          root   html;
+                          index  index.html index.htm;
+                }
+        }
+        server
+        {
+                	listen       172.16.2.1:4400 ssl  reuseport backlog=131072 so_keepalive=off rcvbuf=65536 sndbuf=65536 ;
+          	sendfile on;
+          	sendfile_max_chunk 524288;
+			keepalive_timeout 0s;
+			tcp_nopush on;
+			tcp_nodelay on;
+			ssl_verify_client off;
+			ssl_session_tickets off;
+                	access_log  off;
+                	limit_conn perserver 250;
+                	lingering_close off;
+                	lingering_time 1;
+	 	gzip         on;
+	 gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/vnd.ms-fontobject application/x-font-ttf font/opentype image/svg+xml image/x-icon;
+	 gzip_buffers 16 8k;
+	 gzip_comp_level 1;
+	 gzip_min_length     128;
+	 gzip_http_version   1.0;
+                server_name  server_2;
+
+                ssl_certificate      /nginx/certs/server.crt;
+                ssl_certificate_key  /nginx/certs/server.key;
+
+                ssl_session_timeout  300s;
+
+                ssl_protocols  TLSv1.2;
+                ssl_buffer_size 65536;
+                ssl_ciphers  AES128-SHA:AES256-SHA;
+                ssl_prefer_server_ciphers   on;
+
+                location /
+                {
+                          root   html;
+                          index  index.html index.htm;
+                }
+        }
+        server
+        {
+                	listen       172.16.3.1:4400 ssl  reuseport backlog=131072 so_keepalive=off rcvbuf=65536 sndbuf=65536 ;
+          	sendfile on;
+          	sendfile_max_chunk 524288;
+			keepalive_timeout 0s;
+			tcp_nopush on;
+			tcp_nodelay on;
+			ssl_verify_client off;
+			ssl_session_tickets off;
+                	access_log  off;
+                	limit_conn perserver 250;
+                	lingering_close off;
+                	lingering_time 1;
+	 	gzip         on;
+	 gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/vnd.ms-fontobject application/x-font-ttf font/opentype image/svg+xml image/x-icon;
+	 gzip_buffers 16 8k;
+	 gzip_comp_level 1;
+	 gzip_min_length     128;
+	 gzip_http_version   1.0;
+                server_name  server_3;
+
+                ssl_certificate      /nginx/certs/server.crt;
+                ssl_certificate_key  /nginx/certs/server.key;
+
+                ssl_session_timeout  300s;
+
+                ssl_protocols  TLSv1.2;
+                ssl_buffer_size 65536;
+                ssl_ciphers  AES128-SHA:AES256-SHA;
+                ssl_prefer_server_ciphers   on;
+
+                location /
+                {
+                          root   html;
+                          index  index.html index.htm;
+                }
+        }
+        server
+        {
+                	listen       172.16.4.1:4400 ssl  reuseport backlog=131072 so_keepalive=off rcvbuf=65536 sndbuf=65536 ;
+          	sendfile on;
+          	sendfile_max_chunk 524288;
+			keepalive_timeout 0s;
+			tcp_nopush on;
+			tcp_nodelay on;
+			ssl_verify_client off;
+			ssl_session_tickets off;
+                	access_log  off;
+                	limit_conn perserver 250;
+                	lingering_close off;
+                	lingering_time 1;
+	 	gzip         on;
+	 gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/vnd.ms-fontobject application/x-font-ttf font/opentype image/svg+xml image/x-icon;
+	 gzip_buffers 16 8k;
+	 gzip_comp_level 1;
+	 gzip_min_length     128;
+	 gzip_http_version   1.0;
+                server_name  server_4;
+
+                ssl_certificate      /nginx/certs/server.crt;
+                ssl_certificate_key  /nginx/certs/server.key;
+
+                ssl_session_timeout  300s;
+
+                ssl_protocols  TLSv1.2;
+                ssl_buffer_size 65536;
+                ssl_ciphers  AES128-SHA:AES256-SHA;
+                ssl_prefer_server_ciphers   on;
+
+                location /
+                {
+                          root   html;
+                          index  index.html index.htm;
+                }
+        }
+} 

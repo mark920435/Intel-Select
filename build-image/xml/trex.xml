@@ -1,0 +1,76 @@
+<domain type="kvm">
+  <name>trex</name>
+  <memory unit="MiB">8192</memory>
+  <currentMemory unit="MiB">8192</currentMemory>
+  <cpu mode="host-passthrough"/>
+  <vcpu placement="static">8</vcpu>
+  <cputune>
+    <vcpupin vcpu='0' cpuset='22'/>
+    <vcpupin vcpu='1' cpuset='23'/>
+    <vcpupin vcpu='2' cpuset='24'/>
+    <vcpupin vcpu='3' cpuset='25'/>
+    <vcpupin vcpu='4' cpuset='62'/>
+    <vcpupin vcpu='5' cpuset='63'/>
+    <vcpupin vcpu='6' cpuset='64'/>
+    <vcpupin vcpu='7' cpuset='65'/>
+    <emulatorpin cpuset='26-27,66-67'/>  
+  </cputune>
+  <os>
+    <type machine="pc" arch="x86_64">hvm</type>
+    <boot dev="hd"/>
+    <bios rebootTimeout="1"/>
+  </os>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/libexec/qemu-kvm</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2' cache='none'/>
+      <source file='/var/lib/libvirt/images/trex.qcow2'/>
+      <target dev='vda' bus='virtio'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x00' function='0x0'/>
+    </disk>
+    <disk type='file' device='cdrom'>
+      <driver name='qemu' type='raw'/>
+      <target dev='hda' bus='ide'/>
+      <readonly/>
+      <address type='drive' controller='0' bus='0' target='0' unit='0'/>
+    </disk>
+    <controller type="ide" index="0">
+      <address type="pci" bus="0x00" function="0x1" slot="0x01" domain="0x0000"/>
+    </controller>
+    <serial type="pty">
+      <target port="0"/>
+    </serial>
+    <console type="pty">
+      <target type="serial" port="0"/>
+    </console>
+    <memballoon model="none"> </memballoon>
+    <interface type="bridge">
+      <source bridge="virbr0"/>
+      <mac address="52:54:00:00:00:f2"/>
+      <model type="virtio"/>
+    </interface>
+    <hostdev mode='subsystem' type='pci' managed='yes'>
+      <driver name='vfio'/>
+      <source>
+        <address domain='0x0000' bus='0xb1' slot='0x0a' function='0x0'/>
+      </source>
+      <alias name='hostdev1'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x2' function='0x0'/>
+    </hostdev>
+    <hostdev mode='subsystem' type='pci' managed='yes'>
+      <driver name='vfio'/>
+      <source>
+        <address domain='0x0000' bus='0xb1' slot='0x02' function='0x0'/>
+      </source>
+      <alias name='hostdev2'/>
+      <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
+    </hostdev>
+    <channel type="unix">
+      <source mode="bind"/>
+      <target type="virtio" name="org.qemu.guest_agent.0"/>
+    </channel>
+  </devices>
+</domain>

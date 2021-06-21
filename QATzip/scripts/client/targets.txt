@@ -1,0 +1,2 @@
+GET https://172.16.1.1:4400/1mb_file_1.html
+Accept-Encoding: gzip,deflate

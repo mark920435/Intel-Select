@@ -1,0 +1,45 @@
+[GENERAL]
+ServicesEnabled = cy;dc
+ConfigVersion = 2
+CyNumConcurrentSymRequests = 512
+CyNumConcurrentAsymRequests = 64
+statsGeneral = 1
+statsDh = 1
+statsDrbg = 1
+statsDsa = 1
+statsEcc = 1
+statsKeyGen = 1
+statsDc = 1
+statsLn = 1
+statsPrime = 1
+statsRsa = 1
+statsSym = 1
+StorageEnabled = 0
+PkeDisabled = 0
+InterBuffLogVal = 14
+DcIntermediateBufferSizeInKB = 64
+
+[KERNEL]
+NumberCyInstances = 0
+NumberDcInstances = 0
+Cy0Name = "IPSec0"
+Cy0IsPolled = 0
+Cy0CoreAffinity = 0
+Dc0Name = "IPComp0"
+Dc0IsPolled = 0
+Dc0CoreAffinity = 0
+
+
+[SHIM]
+NumberCyInstances = 1
+NumberDcInstances = 1
+NumProcesses = 2
+LimitDevAccess = 1
+
+Cy0Name = "UserCY0"
+Cy0IsPolled = 1
+Cy0CoreAffinity = 6,7
+
+Dc0Name = "Dc0"
+Dc0IsPolled = 1
+Dc0CoreAffinity = 6,7
